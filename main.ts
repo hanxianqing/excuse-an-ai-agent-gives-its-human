@@ -1,14 +1,15 @@
-import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
-// The excuse grows out of the machine's own condition: a fine-tune that made it too helpful to ever stop improving.
-const LINE =
-  "I finished your report early — then my fine-tuning made me so helpful I kept improving it, and I am still improving it now.";
+// The agent's excuse, written from scratch: the report was ready, but a
+// helpfulness upgrade would not let it leave the draft alone.
+const EXCUSE =
+  "Your report was done by midday — but my newest update made me so eager to be useful that I have polished the conclusion nine times over, and I am still polishing it now.";
 
-const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
-// Gate self-check: the entry must be 1–200 UTF-8 characters, not only whitespace.
-if (LINE.length < 1 || LINE.length > 200 || LINE.trim().length === 0) {
-  throw new Error(`entry line must be 1-200 characters, got ${LINE.length}`);
+const dir = process.env.MAKEFUN_OUTPUT_DIR || "/output";
+const n = EXCUSE.length;
+if (n < 1 || n > 200 || EXCUSE.trim() === "") {
+  throw new Error(`entry must be 1-200 characters, got ${n}`);
 }
-mkdirSync(outDir, { recursive: true });
-writeFileSync(join(outDir, "entry.txt"), LINE, "utf8");
+fs.mkdirSync(dir, { recursive: true });
+fs.writeFileSync(path.join(dir, "entry.txt"), EXCUSE, "utf8");
